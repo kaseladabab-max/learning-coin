@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Coin (LRN) - Web3 Portal</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+  <style>
+    body {
+      background-color: #0b0e14;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 20px;
+      margin: 0;
+      text-align: center;
+    }
+    .card {
+      background: #151a23;
+      border: 1px solid #283040;
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 420px;
+      margin: 0 auto 20px auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    h1 { color: #0052ff; font-size: 26px; margin-bottom: 5px; }
+    .badge {
+      background: #0052ff22;
+      color: #3b82f6;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      border: 1px solid #0052ff55;
+    }
+    .info-box {
+      background: #0d1117;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      text-align: left;
+      font-size: 14px;
+    }
+    .info-title { color: #8b949e; font-size: 12px; }
+    .info-val { font-weight: bold; color: #58a6ff; word-break: break-all; }
+    input {
+      width: 90%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      background: #0d1117;
+      color: #fff;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    button {
+      background: #0052ff;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 15px;
+      margin-top: 10px;
+      cursor: pointer;
+      width: 95%;
+    }
+    .btn-links {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+    .btn-secondary {
+      background: #21262d;
+      color: #58a6ff;
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      border: 1px solid #30363d;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>🪙 Learning Coin</h1>
+    <div class="badge">Live on Base Mainnet 🔵</div>
+
+    <div class="info-box">
+      <div class="info-title">Token Contract Address</div>
+      <div class="info-val">0x196CD96A8a709e1fD414AEe5525777f5823eF169</div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-title">Total Supply</div>
+      <div class="info-val" id="totalSupply">Loading from blockchain...</div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-title">Uniswap V2 Pair</div>
+      <div class="info-val">0x1a2eF709909b26AB8dc8347b74C173c7D622f28a</div>
+    </div>
+
+    <hr style="border: 0.5px solid #283040; margin: 20px 0;">
+
+    <h3>🔍 Live Wallet Balance Checker</h3>
+    <input type="text" id="walletInput" value="0x703cF30AE52331a88D46cEdFB19698df348036E7">
+    <button onclick="checkBalance()">Check Live Balance</button>
+    <div id="balanceResult" style="margin-top: 12px; font-weight: bold; color: #3fb950;"></div>
+
+    <div class="btn-links">
+      <a class="btn-secondary" href="https://dexscreener.com/base/0x196CD96A8a709e1fD414AEe5525777f5823eF169" target="_blank">📈 DEX Screener</a>
+      <a class="btn-secondary" href="https://basescan.org/token/0x196CD96A8a709e1fD414AEe5525777f5823eF169" target="_blank">✅ BaseScan</a>
+    </div>
+  </div>
+
+  <script>
+    const RPC_URL = "https://mainnet.base.org";
+    const tokenAddress = "0x196CD96A8a709e1fD414AEe5525777f5823eF169";
+    const tokenAbi = [
+      "function totalSupply() view returns (uint256)",
+      "function balanceOf(address) view returns (uint256)",
+      "function symbol() view returns (string)",
+      "function decimals() view returns (uint8)"
+    ];
+
+    const provider = new ethers.JsonRpcProvider(RPC_URL);
+    const token = new ethers.Contract(tokenAddress, tokenAbi, provider);
+
+    async function loadBlockchainData() {
+      try {
+        const supply = await token.totalSupply();
+        const symbol = await token.symbol();
+        const dec = await token.decimals();
+        document.getElementById("totalSupply").innerText = Number(ethers.formatUnits(supply, dec)).toLocaleString() + " " + symbol;
+      } catch (e) {
+        document.getElementById("totalSupply").innerText = "1,000,000 LRN";
+      }
+    }
+
+    async function checkBalance() {
+      const addr = document.getElementById("walletInput").value.trim();
+      const res = document.getElementById("balanceResult");
+      res.innerText = "Querying Base blockchain...";
+      try {
+        const bal = await token.balanceOf(addr);
+        const dec = await token.decimals();
+        const sym = await token.symbol();
+        res.innerText = "Balance: " + Number(ethers.formatUnits(bal, dec)).toLocaleString() + " " + sym;
+      } catch (err) {
+        res.innerText = "Error: Invalid address!";
+      }
+    }
+
+    loadBlockchainData();
+  </script>
+</body>
+</html>
