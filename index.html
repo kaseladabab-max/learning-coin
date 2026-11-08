@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learning Coin (LRN) - Web3 Portal</title>
+  <title>Learning Coin (LRN) - Official Portal</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
   <style>
     body {
@@ -18,22 +18,37 @@
       background: #151a23;
       border: 1px solid #283040;
       border-radius: 16px;
-      padding: 20px;
-      max-width: 420px;
+      padding: 24px;
+      max-width: 440px;
       margin: 0 auto 20px auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 25px rgba(0,0,0,0.6);
     }
-    h1 { color: #0052ff; font-size: 26px; margin-bottom: 5px; }
+    h1 { color: #0052ff; font-size: 28px; margin-bottom: 5px; }
     .badge {
       background: #0052ff22;
       color: #3b82f6;
       display: inline-block;
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 20px;
       font-size: 13px;
       margin-bottom: 20px;
       border: 1px solid #0052ff55;
+      font-weight: 600;
     }
+    .btn-buy {
+      display: block;
+      background: linear-gradient(135deg, #0052ff 0%, #00d2ff 100%);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 20px 0;
+      box-shadow: 0 4px 15px rgba(0, 82, 255, 0.4);
+      transition: transform 0.2s;
+    }
+    .btn-buy:active { transform: scale(0.98); }
     .info-box {
       background: #0d1117;
       border-radius: 10px;
@@ -41,9 +56,10 @@
       margin-bottom: 12px;
       text-align: left;
       font-size: 14px;
+      border: 1px solid #21262d;
     }
     .info-title { color: #8b949e; font-size: 12px; }
-    .info-val { font-weight: bold; color: #58a6ff; word-break: break-all; }
+    .info-val { font-weight: bold; color: #58a6ff; word-break: break-all; margin-top: 4px; }
     input {
       width: 90%;
       padding: 12px;
@@ -54,8 +70,8 @@
       font-size: 14px;
       margin-top: 8px;
     }
-    button {
-      background: #0052ff;
+    .btn-check {
+      background: #238636;
       color: #fff;
       border: none;
       padding: 12px 24px;
@@ -64,19 +80,20 @@
       font-size: 15px;
       margin-top: 10px;
       cursor: pointer;
-      width: 95%;
+      width: 96%;
     }
     .btn-links {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
-      margin-top: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
     }
     .btn-secondary {
       background: #21262d;
       color: #58a6ff;
       text-decoration: none;
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: bold;
@@ -90,6 +107,11 @@
     <h1>🪙 Learning Coin</h1>
     <div class="badge">Live on Base Mainnet 🔵</div>
 
+    <!-- 🚀 1-CLICK UNISWAP BUY BUTTON -->
+    <a class="btn-buy" href="https://app.uniswap.org/swap?chain=base&inputCurrency=ETH&outputCurrency=0x196CD96A8a709e1fD414AEe5525777f5823eF169" target="_blank">
+      🚀 Buy LRN on Uniswap
+    </a>
+
     <div class="info-box">
       <div class="info-title">Token Contract Address</div>
       <div class="info-val">0x196CD96A8a709e1fD414AEe5525777f5823eF169</div>
@@ -97,7 +119,7 @@
 
     <div class="info-box">
       <div class="info-title">Total Supply</div>
-      <div class="info-val" id="totalSupply">Loading from blockchain...</div>
+      <div class="info-val" id="totalSupply">Loading blockchain data...</div>
     </div>
 
     <div class="info-box">
@@ -109,11 +131,11 @@
 
     <h3>🔍 Live Wallet Balance Checker</h3>
     <input type="text" id="walletInput" value="0x703cF30AE52331a88D46cEdFB19698df348036E7">
-    <button onclick="checkBalance()">Check Live Balance</button>
+    <button class="btn-check" onclick="checkBalance()">Check Live Balance</button>
     <div id="balanceResult" style="margin-top: 12px; font-weight: bold; color: #3fb950;"></div>
 
     <div class="btn-links">
-      <a class="btn-secondary" href="https://dexscreener.com/base/0x196CD96A8a709e1fD414AEe5525777f5823eF169" target="_blank">📈 DEX Screener</a>
+      <a class="btn-secondary" href="https://dexscreener.com/base/0x196CD96A8a709e1fD414AEe5525777f5823eF169" target="_blank">📈 Live Chart</a>
       <a class="btn-secondary" href="https://basescan.org/token/0x196CD96A8a709e1fD414AEe5525777f5823eF169" target="_blank">✅ BaseScan</a>
     </div>
   </div>
